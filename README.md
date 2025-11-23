@@ -46,13 +46,6 @@ npm run dev
   - Import the `frontend` directory; set `NEXT_PUBLIC_API_BASE` to your backend URL.
 - **Hugging Face Spaces (full stack):**
   - Use `docker-compose.yml` as the Space runtime; ensure `OPENAI_API_KEY` is set in Secrets.
-
-## How to Explain in an Interview
-- **Why RAG over fine-tuning:** cheaper to update, keeps answers live with latest docs, avoids catastrophic forgetting.
-- **Why MCP:** standardizes tool access (GitHub, filesystem, ticketing) so the model can fetch fresh context just-in-time.
-- **Extensibility:** plug into Confluence, Jira, or data warehouses via MCP servers; add auth & RBAC to the FastAPI layer; scale vector DB to managed Chroma/Qdrant.
-- **Reliability:** explicit citations, context budget, and source filters help control hallucinations.
-
 ## Project Structure
 ```
 app/
