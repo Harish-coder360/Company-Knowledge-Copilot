@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  chroma:
+    image: ghcr.io/chroma-core/chroma:0.4.24
+    ports:
+      - "8001:8000"
+    environment:
+      - IS_PERSISTENT=TRUE
+    volumes:
+      - chroma-data:/chroma/.chromadb
+
+  backend:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE:-https://api.openai.com/v1}
+      - VECTOR_DB_URL=http://chroma:8000
+      - ALLOWED_ORIGINS=*
+      - MCP_SERVER_CONFIG=${MCP_SERVER_CONFIG:-/mcp_mirror}
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - chroma
+
+  frontend:
+    build: ./frontend
+    environment:
+      - NEXT_PUBLIC_API_BASE=http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  chroma-data:
